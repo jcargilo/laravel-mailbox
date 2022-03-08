@@ -48,7 +48,9 @@ class InboundEmail extends Model
 
     public function date(): Carbon
     {
-        return Carbon::make($this->message()->getHeaderValue('Date'));
+        return $this->message()->getHeaderValue('Date') 
+            ? Carbon::make($this->message()->getHeaderValue('Date'))
+            : new Carbon;
     }
 
     public function text(): ?string
@@ -129,14 +131,6 @@ class InboundEmail extends Model
         }
 
         return [];
-    }
-
-    /**
-     * @return MessagePart[]
-     */
-    public function attachments()
-    {
-        return $this->message()->getAllAttachmentParts();
     }
 
     public function message(): MimeMessage
